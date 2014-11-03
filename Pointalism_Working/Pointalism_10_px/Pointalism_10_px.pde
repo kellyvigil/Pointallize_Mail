@@ -6,7 +6,7 @@
   
   int smallPoint, largePoint;
   
-  final int DOTSPERDRAW = 100;
+  final int DOTSPERDRAW = 2000;
   
   int numberOfDots = 0;
   
@@ -16,6 +16,9 @@
   
   int index;
   
+  int dots = 0;
+  
+  final int dotCount = 1;
   
   
   
@@ -29,8 +32,8 @@
   
     workingImage = img[0];
   
-    smallPoint = 8;
-    largePoint = 8;
+    smallPoint = 5;
+    largePoint = 5;
     imageMode(CENTER);
     image(workingImage, 960, 540);
     noStroke();
@@ -44,7 +47,7 @@
   
     if (mousePressed) {
   
-      if (numberOfDots > 100000) {
+      if (numberOfDots > 1000000) {
         index = (index + 1) % img.length;
         workingImage = img[index];
         numberOfDots = 0;
@@ -62,7 +65,7 @@
   
       numberOfDots += DOTSPERDRAW;
   
-      println( "number of dots = " + numberOfDots);
+     
     }
   }
   
@@ -103,6 +106,7 @@
     int r = (argb >> 16) & 0xFF;  // Faster way of getting red(argb)
     int g = (argb >> 8) & 0xFF;   // Faster way of getting green(argb)
     int b = argb & 0xFF;          // Faster way of getting blue(argb)
+    
     color pix = theImage.get(x*8, y*8);
     
     //if ((x*10 % 10 == 0) && (y*10 % 10 == 0))
@@ -112,12 +116,18 @@
     
     if (pix == color(252,240,186,255) || a == 0) {
     
+      
     
     }
     else {
       
+      
+      
       fill(pix, 255);  // sets fill color according to the 'loc' RGB value and opacity level
+     
       ellipse(x*8, y*8, pointillize, pointillize);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
+   
+      
     
     
     }  
@@ -125,4 +135,6 @@
     // }
     // }
   }
+  
+ 
 
