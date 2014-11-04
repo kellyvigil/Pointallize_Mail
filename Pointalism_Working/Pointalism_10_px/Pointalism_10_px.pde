@@ -20,6 +20,10 @@
   
   final int dotCount = 1;
   
+  int sm = 2;
+  int lr = 4;
+  
+  
   
   
   void setup() {
@@ -32,8 +36,8 @@
   
     workingImage = img[0];
   
-    smallPoint = 5;
-    largePoint = 5;
+    smallPoint = sm;
+    largePoint = lr;
     imageMode(CENTER);
     image(workingImage, 960, 540);
     noStroke();
@@ -60,20 +64,58 @@
   
       for (int i = 0; i < DOTSPERDRAW; i++) //drawADot 1000x each time void draw() is drawn once (speed up pixel load time)
       {
-        drawADot(workingImage);
+        
+        boolean didDrawADot = false;
+        
+        
+       didDrawADot = drawADot(workingImage);
+       
+       if didDrawADot == true {
+         
+         numberOfDots++;
+        
       }
   
       numberOfDots += DOTSPERDRAW;
+      
+      
+      if (numberOfDots > 900000){
+       sm = 9;
+       lr = 50;
+      }    
+    else if (numberOfDots > 800000){
+       sm = 15;
+       lr = 20;
+      }    
+      else if (numberOfDots > 100000){
+       sm = 9;
+       lr = 12;
+      }
+    
+    else if (numberOfDots > 10000){
+       sm = 6;
+       lr = 9;
+      }
+    else if (numberOfDots > 5000){
+       sm = 3;
+       lr = 5;
+      }   
+    else if (numberOfDots > 1000){    
+       sm = 1;
+       lr = 3;
+      }
   
      
     }
+    
+    
   }
   
   
   
   
   
-  void drawADot(PImage theImage)
+  boolean drawADot(PImage theImage)
   {
   
   
@@ -116,25 +158,21 @@
     
     if (pix == color(252,240,186,255) || a == 0) {
     
-      
+      return false;
     
     }
+    
+    
     else {
       
-      
-      
       fill(pix, 255);  // sets fill color according to the 'loc' RGB value and opacity level
-     
-      ellipse(x*8, y*8, pointillize, pointillize);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
-   
-      
-    
-    
+      ellipse(x*8, y*8, lr, lr);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
+      return true;
     }  
-    // }
-    // }
-    // }
-  }
-  
+      // }
+      // }
+      // }
+    }
+    
  
 
