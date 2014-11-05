@@ -1,12 +1,8 @@
-  // The next line is needed if running in JavaScript Mode with Processing.js
-  /* @pjs preload="moonwalk.jpg"; */
-  
-  
   PImage img[] = new PImage[2];
   
   int smallPoint, largePoint;
   
-  final int DOTSPERDRAW = 2000;
+  final int DOTSPERDRAW = 1000;
   
   int numberOfDots = 0;
   
@@ -21,8 +17,12 @@
   final int dotCount = 1;
   
   int sm = 2;
+  
   int lr = 4;
   
+  boolean sketchFullScreen() {
+  return true;
+}
   
   
   
@@ -31,7 +31,7 @@
     //img = loadImage("rio.jpg");
   
   
-    img[0] = loadImage("drake.png");
+    img[0] = loadImage("painting.png");
     img[1] = loadImage("river.png");
   
     workingImage = img[0];
@@ -41,7 +41,7 @@
     imageMode(CENTER);
     image(workingImage, 960, 540);
     noStroke();
-    background(255);
+    background(0);
   }
   
   
@@ -58,64 +58,52 @@
       }
   
       if (numberOfDots == 0) {
-        background(255);
+        background(0);
       } 
   
   
       for (int i = 0; i < DOTSPERDRAW; i++) //drawADot 1000x each time void draw() is drawn once (speed up pixel load time)
       {
-        
-        boolean didDrawADot = false;
-        
-        
-       didDrawADot = drawADot(workingImage);
-       
-       if didDrawADot == true {
-         
-         numberOfDots++;
-        
+        drawADot(workingImage);
+  
+  
+        if (numberOfDots > 950000) {
+          sm = 1;
+          lr = 3;
+        }
+  
+        else if (numberOfDots > 900000) {
+          sm = 50;
+          lr = 50;
+        } else if (numberOfDots > 800000) {
+          sm = 15;
+          lr = 20;
+        } else if (numberOfDots > 600000) {
+          sm = 9;
+          lr = 12;
+        } else if (numberOfDots > 400000) {
+          sm = 6;
+          lr = 9;
+        } else if (numberOfDots > 20000) {
+          sm = 3;
+          lr = 5;
+        } else if (numberOfDots > 8000) {    
+          sm = 1;
+          lr = 3;
+        }
       }
   
       numberOfDots += DOTSPERDRAW;
-      
-      
-      if (numberOfDots > 900000){
-       sm = 9;
-       lr = 50;
-      }    
-    else if (numberOfDots > 800000){
-       sm = 15;
-       lr = 20;
-      }    
-      else if (numberOfDots > 100000){
-       sm = 9;
-       lr = 12;
-      }
-    
-    else if (numberOfDots > 10000){
-       sm = 6;
-       lr = 9;
-      }
-    else if (numberOfDots > 5000){
-       sm = 3;
-       lr = 5;
-      }   
-    else if (numberOfDots > 1000){    
-       sm = 1;
-       lr = 3;
-      }
   
-     
+      println("dots = " + numberOfDots);
     }
-    
-    
   }
   
   
   
   
   
-  boolean drawADot(PImage theImage)
+  void drawADot(PImage theImage)
   {
   
   
@@ -135,7 +123,7 @@
     //for (int y = 0; y < height; y++) {
     // for (int x = 0; x < width; x++) {
     int loc = (x + y*width)*8;  // grabs a location on the image data strip to later find the color of that data point.
-    
+  
   
     //add tenth_pixel_image code
   
@@ -148,31 +136,33 @@
     int r = (argb >> 16) & 0xFF;  // Faster way of getting red(argb)
     int g = (argb >> 8) & 0xFF;   // Faster way of getting green(argb)
     int b = argb & 0xFF;          // Faster way of getting blue(argb)
+  
+    color pix = theImage.get(x*8, y*7);
+  
     
-    color pix = theImage.get(x*8, y*8);
-    
+  
     //if ((x*10 % 10 == 0) && (y*10 % 10 == 0))
     // If we are an even column
   
     //if (mousePressed) {  // do the following drawings when the mouse is pressed (later to be data input).
-    
-    if (pix == color(252,240,186,255) || a == 0) {
-    
-      return false;
-    
-    }
-    
-    
-    else {
+  
+    if (pix == color(252, 240, 186)) {
       
-      fill(pix, 255);  // sets fill color according to the 'loc' RGB value and opacity level
-      ellipse(x*8, y*8, lr, lr);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
-      return true;
-    }  
-      // }
-      // }
-      // }
+      
     }
     
+     
+    else {
  
+      fill(pix, 255);  // sets fill color according to the 'loc' RGB value and opacity level
+  
+      ellipse(x*8, y*8, sm, sm);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
+    
+  }
+  
+ 
+    // }
+    // }
+    // }
+  }
 
