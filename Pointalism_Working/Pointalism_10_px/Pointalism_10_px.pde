@@ -20,11 +20,13 @@
   
   int lr = 4;
   
-  boolean sketchFullScreen() {
+ /*( boolean sketchFullScreen() {
   return true;
 }
+  */
   
   
+  int drawnDots = 0;
   
   void setup() {
     size(1920, 1080);
@@ -51,13 +53,13 @@
   
     if (mousePressed) {
   
-      if (numberOfDots > 1000000) {
+      if (drawnDots > 100000) {
         index = (index + 1) % img.length;
         workingImage = img[index];
-        numberOfDots = 0;
+        drawnDots = 0;
       }
   
-      if (numberOfDots == 0) {
+      if (drawnDots == 0) {
         background(0);
       } 
   
@@ -66,8 +68,8 @@
       {
         drawADot(workingImage);
   
-  
-        if (numberOfDots > 950000) {
+      }
+      /*  if (numberOfDots > 950000) {
           sm = 1;
           lr = 3;
         }
@@ -90,12 +92,13 @@
         } else if (numberOfDots > 8000) {    
           sm = 1;
           lr = 3;
-        }
-      }
+        } */
+      
   
       numberOfDots += DOTSPERDRAW;
+      println("number of dots  = " + numberOfDots);
   
-      println("dots = " + numberOfDots);
+      
     }
   }
   
@@ -114,7 +117,7 @@
   
   
   
-    float pointillize = map(mouseX, 0, width, smallPoint, largePoint); // pointalize is a float determined by the 'x' position of the mouse. It creates a value between 0 - 100 that is translated to 0 = smallPoint's size and 100 = large point's size. This generates all floats inbetween smallPoint and largePoint.
+    //float pointillize = map(mouseX, 0, width, smallPoint, largePoint); // pointalize is a float determined by the 'x' position of the mouse. It creates a value between 0 - 100 that is translated to 0 = smallPoint's size and 100 = large point's size. This generates all floats inbetween smallPoint and largePoint.
     int x = int(random(0, imageWidth/8)); // x is a random interger between 0 and imageWidth/(n). This later allows the multiplication of the x value to map out ellipeses every (n) pixels 
     int y = int(random(0, imageHeight/8)); // y is a random interger between 0 and imageHeight/(n). This later allows the multiplication of the x value to map out ellipeses every (n) pixels
   
@@ -137,16 +140,24 @@
     int g = (argb >> 8) & 0xFF;   // Faster way of getting green(argb)
     int b = argb & 0xFF;          // Faster way of getting blue(argb)
   
-    color pix = theImage.get(x*8, y*7);
+    color pix = theImage.get(x*8, y*8);
+    
+    
   
     
   
     //if ((x*10 % 10 == 0) && (y*10 % 10 == 0))
     // If we are an even column
-  
     //if (mousePressed) {  // do the following drawings when the mouse is pressed (later to be data input).
-  
+   
+   
+    boolean drawThis = false;
+    
+    
+    
     if (pix == color(252, 240, 186)) {
+      
+      drawThis = false;
       
       
     }
@@ -154,15 +165,32 @@
      
     else {
  
+      drawThis = true;
+    } 
+  
+    if (drawThis) {
+      
       fill(pix, 255);  // sets fill color according to the 'loc' RGB value and opacity level
   
-      ellipse(x*8, y*8, sm, sm);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
+      ellipse(x*8, y*8, 8, 8);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
+     
+     drawnDots += 1;
+     
+    }
     
-  }
+    if (!drawThis) {
+      
+    }
+    
+    println("dot count = " + drawnDots);
+    
   
  
     // }
     // }
     // }
   }
-
+  
+ 
+  
+  
