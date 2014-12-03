@@ -1,26 +1,8 @@
 import gifAnimation.*;
+import org.rsg.carnivore.*;
+import org.rsg.lib.Log;
 GifMaker gifExport;
-
-
-// X1CIqHNfM3Vi5OuxqpktKDTIU                           << twitter Consermer API Key
-// SUPqNPbxlYWnLznusEpSEKokNXoeG4scbFscdTgTJIY6R5zSA9  << twitter Consumer API Secret
-// 387406776-05Uk4V5KmTjfu035FPtleMngacrc97PesgaKSrtV  << twitter Access Token
-// Us4wFQjOxyMsLSdFhq4xMO0M65uBzyBYMyCDVQDRmm8Z3       << twitter Access Token Secret
-
-  /*
-  import twitter4j.conf.*;
-  import twitter4j.*;
-  import twitter4j.auth.*;
-  import twitter4j.api.*;
-  import java.util.*;
-  
-  Twitter twitter;
-  String searchString = "digital";  
-  List<Status> tweets;
-  
-  int currentTweet;
-  */
-  
+CarnivoreP5 c;
   
   
   PImage img[] = new PImage[2];
@@ -33,47 +15,33 @@ GifMaker gifExport;
   
   int drawnDots = 0;
   
-  int sm = 40;
+  int sm = 7;
   
   int lr = 4;
   
   int drawSpeed = 100;
   
-  int maxDots = 100000;
+  int maxDots = 200000;
   
+  boolean packet = false;
   
+  boolean tcpDitected = false;
   
-  /*( boolean sketchFullScreen() {
-   return true;
-   }
-   */
+
+
    
    
   
   void setup() {
     
     size(1920, 1080);
-    /*
-    ConfigurationBuilder cb = new ConfigurationBuilder();
-    cb.setOAuthConsumerKey("X1CIqHNfM3Vi5OuxqpktKDTIU");
-    cb.setOAuthConsumerSecret("SUPqNPbxlYWnLznusEpSEKokNXoeG4scbFscdTgTJIY6R5zSA9");
-    cb.setOAuthAccessToken("387406776-05Uk4V5KmTjfu035FPtleMngacrc97PesgaKSrtV");
-    cb.setOAuthAccessTokenSecret("Us4wFQjOxyMsLSdFhq4xMO0M65uBzyBYMyCDVQDRmm8Z3");
     
-    TwitterFactory tf = new TwitterFactory(cb.build());
-    
-    twitter = tf.getInstance();
-    
-    getNewTweets();
-    
-    
-    
-    currentTweet = 0;
-    */
+    Log.setDebug(true); // Uncomment for verbose mode
+    c = new CarnivoreP5(this); 
   
-    img[0] = loadImage("dickbutt.png");
+    img[0] = loadImage("painting.png");
   
-    img[1] = loadImage("river.png");
+    img[1] = loadImage("drake.png");
     
   
     workingImage = img[0];
@@ -84,176 +52,89 @@ GifMaker gifExport;
   
     noStroke();
   
-    background(255);
+    background(0);
     
     img2 = loadImage("dickbuttsmall.png");
-    
- // thread("refreshTweets");
-    
-    //frameRate(30);
-    
-    
- // gifExport = new GifMaker(this, "dickbutt_export.gif");
- // gifExport.setRepeat(0); // make it an "endless" animation
- // gifExport.setTransparent(255); // make white the transparent color -- match browser bg color
- // gifExport.setDelay(1000/30);  //12fps in ms
-    
+ 
 
     
   }
   
+ 
+  
+  void packetEvent(CarnivorePacket p){
+    
+    println("(" + p.strTransportProtocol + " packet) " + p.senderSocket() + " > " + p.receiverSocket() + " || dots = " + drawnDots);
+    
+    //println("dots = " + drawnDots);
+    
+    drawADot(workingImage);
+    
+   if (p.strTransportProtocol == "TCP" || p.strTransportProtocol == "UDP") {
+          
+          packet = true;
+   
+        }
+        
+      else {
+          packet = false;
+          
+        } 
+        
+      if (packet) {
+          
+          tcpDitected = true;
+          packet = false;
+          
+          //for (int i = 0; i < drawSpeed; i++){
+          //drawADot(workingImage);
+          //}
+         
+          
+        }
+        
+      if (!packet){
+        
+          
+          
+        }
+        
+  
+}
+  
   
   
   void draw() { 
-  
-  
-    if (mousePressed) { 
+     
   
       if (drawnDots > maxDots) { // when drawnDots is greater than maxDots move to the next image and set drawn dots back to 0
         
         index = (index + 1) % img.length;
         workingImage = img[index];
         drawnDots = 0;
-        gifExport.finish();
+        //gifExport.finish();
         
       }
   
       if (drawnDots == 0) { // when drawnDots is 0 set the background to black
         
-        background(255);
+        background(0);
       
       } 
-  
-  
-      for (int i = 0; i < drawSpeed; i++){ //drawADot drawSpeed times each time void draw() is drawn once (speed up pixel load time)
       
-        drawADot(workingImage);
+      drawADot(workingImage);
+      
+      //for (int i = 0; i < drawSpeed; i++){
         
-      }
-      
-      /*  if (numberOfDots > 950000) {
-        
-       sm = 1;
-       lr = 3;
-       
-       }
-       
-       else if (numberOfDots > 900000) {
-         
-       sm = 50;
-       lr = 50;
-       
-       } 
-       
-       else if (numberOfDots > 800000) {
-         
-       sm = 15;
-       lr = 20;
-       
-       } 
-       
-       else if (numberOfDots > 600000) {
-         
-       sm = 9;
-       lr = 12;
-       
-       } 
-       
-       else if (numberOfDots > 400000) {
-         
-       sm = 6;
-       lr = 9;
-       
-       } 
-       
-       else if (numberOfDots > 20000) {
-         
-       sm = 3;
-       lr = 5;
-       
-       } 
-       
-       else if (numberOfDots > 8000) {  
-         
-       sm = 1;
-       lr = 3;
-       
-       } */
-       
-       
-       
-       
-    }
-    
-    /*
-    fill(0, 40);
-    
-    rect(0, 0, width, height);
-    
-    currentTweet = currentTweet + 1;
-    
-    if (currentTweet >= tweets.size()){
-      
-    currentTweet = 0;
-    
-    }
-    
-    Status status = tweets.get(currentTweet);
-    
-    fill(200);
-    
-    text(status.getText(), random(width), random(height), 300, 200);
-    
-    delay(250);
-    
-    */
-    
-   // gifExport.setDelay(1);
-   // gifExport.addFrame();
-    
+      //}
   }
-  
-  /*void getNewTweets() {
-    
-    try {
-      
-    Query query = new Query(searchString); // try to get tweets here
-    
-    QueryResult result = twitter.search(query);
-    
-    tweets = result.getTweets();
-    
-    } 
-    catch (TwitterException te) {
-      
-    System.out.println("Failed to search tweets: " + te.getMessage()); // deal with the case where we can't get them here
-    
-    System.exit(-1);
-    
-    }
-    
-  }
-  
-  
-   void refreshTweets(){
-     
-     while (true){
-       
-        getNewTweets();
-
-        println("Updated Tweets"); 
-
-        delay(0);
-    }
-
-   }
    
-   */
-  
  
   void drawADot(PImage theImage){
+    
+    
   
-  
+  if (tcpDitected) {
   
     int imageWidth = theImage.width; // interger 'imageWidth' = width of image
     int imageHeight = theImage.height;  // interger 'imageHeight' = height of image
@@ -271,8 +152,12 @@ GifMaker gifExport;
     int b = argb & 0xFF;          // Faster way of getting blue(argb)
   
     color pix = theImage.get(x*8, y*8); // get the color of every 8th x 8th pixel
+    
+    
   
     boolean drawThis = false; //drawThis boolean
+    
+  
       
     if (pix == color(252, 240, 186)) { // if the color of the pixel is yellow
   
@@ -288,12 +173,12 @@ GifMaker gifExport;
   
     if (drawThis) { // if drawThis is true do the following
   
-      //fill(pix, 255);  // sets fill color according to the 'loc' RGB value and opacity level
+      fill(pix, 255);  // sets fill color according to the 'loc' RGB value and opacity level
   
-      //ellipse(x*4, y*4, sm, sm);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
+      ellipse(x*8, y*8, sm, sm);  // draws an ellipse at every x,y location devisable by eight; width and height is equal to the map() formula set in 'pointillize'.
   
   
-      image(img2, x*8, y*8, sm, sm);
+      //image(img2, x*8, y*8, sm, sm);
       
       
       drawnDots += 1; // if a dot is drawn, count it
@@ -303,13 +188,18 @@ GifMaker gifExport;
     if (!drawThis) { // do nothing if drawThis is false i.e. if color(252,240,186)
       
     }
-  
-    println("dot count = " + drawnDots);
-  
-  
+    
   }
+    
   
-  
-  
-  
+    
+    tcpDitected = false;
+    
+    
+    
+   
 
+  
+}
+  
+ 
